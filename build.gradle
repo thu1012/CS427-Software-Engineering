@@ -1,0 +1,16 @@
+apply plugin: 'java'
+
+repositories {
+	mavenCentral()
+    maven {
+        url = uri("https://repo.maven.apache.org/maven2")
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'ant-libs', include: ['*.jar'])
+}
+
+description = 'jasonh11'
+
+buildDir = file('gradle-target')
