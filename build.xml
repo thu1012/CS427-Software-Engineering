@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project basedir="." default="build" name="mp1">
+    <property environment="env"/>
+    <property name="junit.output.dir" value="ant-target/reports"/>
+    <property name="debuglevel" value="source,lines,vars"/>
+    <property name="target" value="1.8"/>
+    <property name="source" value="1.8"/>
+
+    <!-- 
+    # Variable declarations
+    -->
+    <path id="jasonh11.classpath">
+        <pathelement location="ant-target/test-classes"/>
+        <pathelement location="ant-target/classes"/>
+        <fileset dir="ant-libs">
+            <include name="**/*.jar"/>
+        </fileset>
+    </path>
+
+    <!--
+    # Task for cleaning all files generated from last Ant build 
+    -->
+    <target name="clean">
+        <delete dir="ant-target/test-classes"/>
+        <delete dir="ant-target/classes"/>
+    </target>
+
+    <!--
+    # Compile all the Java source files from source to target directories 
+    -->
+    <target name="build">
+        <echo message="${ant.project.name}: ${ant.file}"/>
+        <mkdir dir="ant-target/classes"/>
+        <javac debug="true" debuglevel="${debuglevel}" destdir="ant-target/classes" 
+                includeantruntime="false" source="${source}" target="${target}" encoding="UTF-8">
+            <src path="src/main/java"/>
+            <include name="**/*.java"/>
+            <classpath refid="jasonh11.classpath"/>
+        </javac>
+    </target>
+
+    <!--                                                                                                                   
+    # Compile all the Java test files from source to target directories                                                  
+    -->
+    <target name="build-test" depends="build">
+        <mkdir dir="ant-target/test-classes"/>
+        <javac debug="true" debuglevel="${debuglevel}" destdir="ant-target/test-classes" 
+                includeantruntime="false" source="${source}" target="${target}" encoding="UTF-8">
+            <src path="src/test/java"/>
+            <include name="**/*.java"/>
+            <classpath refid="jasonh11.classpath"/>
+        </javac>
+    </target>
+
+    <!--
+    # Copy all test resource files from source to target directories
+    -->
+    <target name="copy-test-resource-files">
+        <copy todir="ant-target/test-classes">
+            <fileset dir="src/test/resources"/>
+        </copy>
+    </target>
+
+    <!--                                                                                                                   
+    # Run all the tests and store the junit report in the ${junit.output.dir}/html directory           
+    -->
+    <target name="test" depends="build-test, copy-test-resource-files">
+        <mkdir dir="${junit.output.dir}"/>
+        <mkdir dir="${junit.output.dir}/html"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <batchtest todir="${junit.output.dir}">
+                <fileset dir="src/test/java">
+                    <include name="**/*Test.java"/>
+                </fileset>
+            </batchtest>
+            <classpath refid="jasonh11.classpath"/>
+        </junit>
+        <junitreport>
+            <fileset dir="${junit.output.dir}">
+                <include name="TEST-*.xml"/>  
+            </fileset>
+            <report format="frames" todir="${junit.output.dir}/html"/>
+	</junitreport>
+	<echo message="Please find the final JUnit test report at: ${junit.output.dir}/html/index.html"/>
+    </target>
+</project>
