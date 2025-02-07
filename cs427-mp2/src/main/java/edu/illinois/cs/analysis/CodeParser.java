@@ -1,9 +1,6 @@
 package edu.illinois.cs.analysis;
 
-import com.github.javaparser.StaticJavaParser;
-import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Modifier;
-import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 
@@ -22,8 +19,14 @@ public class CodeParser extends VoidVisitorAdapter
 		
 		// TODO: add your implementation here so that it counts the methods
 		// satisfying the listed constriants rather than all possible methods
-		
-		methNum++;
+		// https://github.com/javaparser/javaparser/blob/master/javaparser-core/src/main/java/com/github/javaparser/ast/Modifier.java
+		if (n.getBody().isPresent()
+                && !n.getParameters().isEmpty()
+                && n.getModifiers().contains(Modifier.publicModifier())
+                && !n.getModifiers().contains(Modifier.staticModifier())
+                && !n.getType().isVoidType()) {
+            methNum++;
+        }
 	}
 
 }
