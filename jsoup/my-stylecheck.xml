@@ -210,6 +210,9 @@
         <module name="SingleLineJavadoc">
             <property name="ignoreInlineTags" value="false"/>
         </module>
+        <module name="JavadocMethod">
+            <property name="scope" value="public"/>
+        </module>
         <module name="EmptyCatchBlock">
             <property name="exceptionVariableName" value="expected"/>
         </module>
