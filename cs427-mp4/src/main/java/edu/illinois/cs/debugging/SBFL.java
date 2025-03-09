@@ -86,7 +86,10 @@ public class SBFL
             }
         }
 
-        for(String line : fail.keySet()) {
+        Set<String> covered = new HashSet<>(fail.keySet());
+        covered.addAll(pass.keySet());
+
+        for(String line : covered) {
             int fails = fail.getOrDefault(line, 0);
             int passes = pass.getOrDefault(line, 0);
             if (failedTests.size() * (fails+passes) > 0) {
